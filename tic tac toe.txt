@@ -1,0 +1,99 @@
+
+
+data<- read.csv(file.choose(),sep=',a',header=T)
+head(data)
+str(data)
+summary(data)
+
+
+
+
+---------------------------/
+#include <iostream>
+
+
+using namespace std;
+
+char board[3][3] = { {' ', ' ', ' '},
+                     {' ', ' ', ' '},
+                     {' ', ' ', ' '} };
+
+bool isGameOver() {
+    // Check rows
+    for (int i = 0; i < 3; i++) {
+        if (board[i][0] == board[i][1] && board[i][1] == board[i][2] && board[i][0] != ' ') {
+            return true;
+        }
+    }
+
+    // Check columns
+    for (int i = 0; i < 3; i++) {
+        if (board[0][i] == board[1][i] && board[1][i] == board[2][i] && board[0][i] != ' ') {
+            return true;
+        }
+    }
+
+    // Check diagonals
+    if (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] != ' ') {
+        return true;
+    }
+    if (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[0][2] != ' ') {
+        return true;
+    }
+
+    // Check for tie
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (board[i][j] == ' ') {
+                return false; // There are empty spaces left
+            }
+        }
+    }
+
+    return true; // The game is a tie
+}
+
+void printBoard() {
+    cout << "-------------" << endl;
+    for (int i = 0; i < 3; i++) {
+        cout << "| ";
+        for (int j = 0; j < 3; j++) {
+            cout << board[i][j] << " | ";
+        }
+        cout << endl;
+        cout << "-------------" << endl;
+    }
+}
+
+int main() {
+    char currentPlayer = 'X';
+    int row, col;
+
+    while (!isGameOver()) {
+        printBoard();
+        cout << "Player " << currentPlayer << ", enter your move (row col): ";
+        cin >> row >> col;
+
+        if (row < 1 || row > 3 || col < 1 || col > 3 || board[row - 1][col - 1] != ' ') {
+            cout << "Invalid move. Please try again." << endl;
+            continue;
+        }
+
+        board[row - 1][col - 1] = currentPlayer;
+
+        if (isGameOver()) {
+            if (currentPlayer == 'X') {
+                cout << "Player X wins!" << endl;
+            } else {
+                cout << "Player O wins!" << endl;
+            }
+        } else {
+            currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+        }
+    }
+
+    printBoard();
+    cout << "Game over." << endl;
+
+    return 0;
+}
